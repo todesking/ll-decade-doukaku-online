@@ -10,6 +10,13 @@ class LLNOCrypt
       return true
     end
     def ipv6? str
+      str.split(':').each do|num_str|
+        return false unless num_str =~ /^[0-9A-Fa-f]+$/
+        num = num_str.to_i(16)
+        return false unless 0x0000 <= num && num <= 0xFFFF
+        return false if num_str =~ /^0.+/
+      end
+      return true
     end
   end
 end
