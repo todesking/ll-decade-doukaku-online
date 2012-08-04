@@ -16,7 +16,14 @@ describe LLNOCrypt do
       end
     end
     describe '#ipv6?' do
-      it '文字列がIPv6かどうか判別できる'
+      it '文字列がIPv6かどうか判別できる' do
+        should be_ipv6 '0:0:0:0:0:0:0:0'
+        should be_ipv6 '2001:1234:3210:ABCD:9876:3232:3812:FFAB'
+        should be_ipv6 '0:2000:11:1:2:3:211:10'
+      end
+      it '無駄なゼロがついていたらIPv6ではない' do
+        should_not be_ipv6 '1:2:3:4:5:6:07:8'
+      end
     end
     describe '#mac?' do
       it '文字列がMACアドレスかどうか判別できる'

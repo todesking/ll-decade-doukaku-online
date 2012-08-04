@@ -9,5 +9,7 @@ class LLNOCrypt
       end
       return true
     end
+    def ipv6? str
+    end
   end
 end
