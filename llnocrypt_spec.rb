@@ -43,16 +43,15 @@ describe LLNOCrypt do
     end
     describe '#mac?' do
       it '文字列がMACアドレスかどうか判別できる' do
-        should be_mac '0:11:22:333:4444:FFFF'
+        should be_mac '00:11:22:33:44:FF'
         should be_mac '1A-B2-c3-d4-e5-f6'
         should_not be_mac 'XX:11:22:33:44:55'
+        should_not be_mac '11:1:22:33:44:55'
+        should_not be_mac '11:11:22:33:44:555'
         should_not be_mac ''
       end
       it '空文字列は受理しない' do
         should_not be_mac ''
-      end
-      it '無駄なゼロがついていたらMACではない' do
-        should_not be_mac 'aa-bb-cc-dd-ee-00'
       end
       it '区切り文字は統一されてる' do
         should_not be_mac '1A-B2:c3-d4-e5-f6'
@@ -73,7 +72,7 @@ describe LLNOCrypt do
     it '文字列を対応する数値に変換できる' do
       subject.decode_str_to_num('192.168.0.23').should == 0b01
       subject.decode_str_to_num('0:0:0:0:0:0:0:0').should == 0b10
-      subject.decode_str_to_num('A-B-C-D-E-F').should == 0b00
+      subject.decode_str_to_num('AA-BB-CC-DD-EE-FF').should == 0b00
       subject.decode_str_to_num('hoge').should == 0b11
     end
   end

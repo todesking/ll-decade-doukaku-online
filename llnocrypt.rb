@@ -11,16 +11,16 @@ class LLNOCrypt
     def mac? str
       return false unless str =~ /([-:])/
       separator = $1
-      return number_list?(str, separator, 16, 6, 0x0000..0xFFFF)
+      return number_list?(str, separator, 16, 6, 0x0000..0xFFFF, /^[0-9A-Fa-f]{2}$/)
     end
 
     private
-    def number_list?(str, separator, base, length, num_range)
-      num_pattern = case base
-                    when 10 then /^(0|[1-9][0-9]*)$/
-                    when 16 then /^(0|[1-9A-Fa-f][0-9A-Fa-f]*)$/
-                    else raise "base unsupported: #{base}"
-                    end
+    def number_list?(str, separator, base, length, num_range, num_pattern=nil)
+      num_pattern ||= case base
+                      when 10 then /^(0|[1-9][0-9]*)$/
+                      when 16 then /^(0|[1-9A-Fa-f][0-9A-Fa-f]*)$/
+                      else raise "base unsupported: #{base}"
+                      end
 
       return false if str.empty?
 
@@ -63,7 +63,7 @@ class LLNOCrypt
     lines.map(&:strip).each_slice(4).map{|chunk|
       chunk.map {|str|
         decode_str_to_num str
-      }.tap{|c|puts [chunk,c].inspect}
+      }
     }.map{|chunk|
       decode_bits_to_char *chunk
     }.join
