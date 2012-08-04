@@ -17,7 +17,9 @@ describe LLNOCrypt do
       it '無駄なゼロがついてたらIPv4ではない' do
         should_not be_ipv4 '00.0.0.0'
       end
-      it '数字の並びは4つ'
+      it '数字の並びは4つ' do
+        should_not be_ipv4 '0.0'
+      end
     end
     describe '#ipv6?' do
       it '文字列がIPv6かどうか判別できる' do
@@ -33,9 +35,11 @@ describe LLNOCrypt do
         should_not be_ipv6 '1:2:3:4:5:6:07:8'
       end
       it '小文字も受理する' do
-        should be_ipv6 'ABCd:1234:5678:ffff'
+        should be_ipv6 'ABCd:1234:5678:ffff:0:0:0:0'
       end
-      it '数字の並びは8つ'
+      it '数字の並びは8つ' do
+        should_not be_ipv6 '1234:1'
+      end
     end
     describe '#mac?' do
       it '文字列がMACアドレスかどうか判別できる' do
@@ -53,13 +57,47 @@ describe LLNOCrypt do
       it '区切り文字は統一されてる' do
         should_not be_mac '1A-B2:c3-d4-e5-f6'
       end
-      it '数字の並びは6つ'
+      it '数字の並びは6つ' do
+        should_not be_mac 'a:b'
+      end
     end
   end
+  subject { LLNOCrypt.new }
   describe '#decode_bits_to_char' do
-    it '2ビットx4の並びを文字に変換できる'
+    it '2ビットx4の並びを文字に変換できる' do
+      subject.decode_bits_to_char(0b01, 0b10, 0b00, 0b01).should == 'a'
+      subject.decode_bits_to_char(0b00, 0b10, 0b10, 0b10).should == '*'
+    end
+  end
+  describe  '#decode_str_to_num' do
+    it '文字列を対応する数値に変換できる' do
+      subject.decode_str_to_num('192.168.0.23').should == 0b01
+      subject.decode_str_to_num('0:0:0:0:0:0:0:0').should == 0b10
+      subject.decode_str_to_num('A-B-C-D-E-F').should == 0b00
+      subject.decode_str_to_num('hoge').should == 0b11
+    end
   end
   describe '#decode' do
-    it '暗号文を解読できる'
+    it '暗号文を解読できる' do
+      src = <<-EOS.split(/\n/)
+192.168.0.23
+00:00:01:22:23:34
+FF:DD:BB:AA:CC:EE
+2001:db8:bd05:1d2:288a:1fc0:1:10ee
+123.45.67.89
+12:34:56:78:9a:bc
+1A-2B:2E-09:12:22
+300.100.200.10
+10.232.33.44
+90-12-03-92-00-01
+01234:22:4444:34:5555:5:f
+0.100.32.10
+100.200.100.200
+10:20:30:01:02:03
+11-22-33-44-55-66
+9f34:234:1:123:45:6:FFFF:FFF
+      EOS
+      subject.decode(src).should == 'BOMB'
+    end
   end
 end
