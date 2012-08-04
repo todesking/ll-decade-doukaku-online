@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+require './llnocrypt'
 describe LLNOCrypt do
   describe LLNOCrypt::Distincter do
     it '文字列がIPv4かどうか判別できる'
@@ -8,6 +10,6 @@ describe LLNOCrypt do
     it '2ビットx4の並びを文字に変換できる'
   end
   describe '#decode' do
-    `暗号文を解読できる'
+    it '暗号文を解読できる'
   end
 end
