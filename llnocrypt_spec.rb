@@ -3,7 +3,7 @@ require './llnocrypt'
 describe LLNOCrypt do
   describe LLNOCrypt::Distincter do
     subject { LLNOCrypt::Distincter.new }
-    describe 'ipv4?' do
+    describe '#ipv4?' do
       it '文字列がIPv4かどうか判別できる' do
         should be_ipv4 '0.0.0.0'
         should be_ipv4 '255.255.255.255'
@@ -15,8 +15,12 @@ describe LLNOCrypt do
         should_not be_ipv4 '00.0.0.0'
       end
     end
-    it '文字列がIPv6かどうか判別できる'
-    it '文字列がMACアドレスかどうか判別できる'
+    describe '#ipv6?' do
+      it '文字列がIPv6かどうか判別できる'
+    end
+    describe '#mac?' do
+      it '文字列がMACアドレスかどうか判別できる'
+    end
   end
   describe '#decode_bits_to_char' do
     it '2ビットx4の並びを文字に変換できる'
