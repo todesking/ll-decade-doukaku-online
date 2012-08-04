@@ -1,6 +1,7 @@
 class LLNOCrypt
   class Distincter
     def ipv4? str
+      return false if str.empty?
       str.split('.').each do|num_str|
         return false unless num_str =~ /^\d+$/
         num = num_str.to_i
@@ -10,6 +11,7 @@ class LLNOCrypt
       return true
     end
     def ipv6? str
+      return false if str.empty?
       str.split(':').each do|num_str|
         return false unless num_str =~ /^[0-9A-Fa-f]+$/
         num = num_str.to_i(16)

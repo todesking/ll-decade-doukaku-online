@@ -11,6 +11,9 @@ describe LLNOCrypt do
         should_not be_ipv4 '256.255.255.255'
         should_not be_ipv4 '0..0.0'
       end
+      it '空文字列は受理しない' do
+        should_not be_ipv4 ''
+      end
       it '無駄なゼロがついてたらIPv4ではない' do
         should_not be_ipv4 '00.0.0.0'
       end
@@ -20,6 +23,10 @@ describe LLNOCrypt do
         should be_ipv6 '0:0:0:0:0:0:0:0'
         should be_ipv6 '2001:1234:3210:ABCD:9876:3232:3812:FFAB'
         should be_ipv6 '0:2000:11:1:2:3:211:10'
+        should_not be_ipv6 '0:0:0:0:0:0:0:X'
+      end
+      it '空文字列は受理しない' do
+        should_not be_ipv4 ''
       end
       it '無駄なゼロがついていたらIPv6ではない' do
         should_not be_ipv6 '1:2:3:4:5:6:07:8'
