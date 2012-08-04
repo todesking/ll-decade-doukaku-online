@@ -65,7 +65,8 @@ class LLNOCrypt
         decode_str_to_num str
       }
     }.map{|chunk|
-      decode_bits_to_char *chunk
+      next '?' unless chunk.size == 4
+      decode_bits_to_char(*chunk)
     }.join
   end
 end
